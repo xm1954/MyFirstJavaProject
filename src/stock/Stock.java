@@ -59,6 +59,7 @@ class Parse extends Stock{
         System.out.println(stock_info);
         Elements more_infos = document.select("#stockContent > ul > li > dl > dd > :not(span)");
         System.out.println(more_infos);
+        System.out.println(more_infos);
         return stock_info;
     }
     @Override
