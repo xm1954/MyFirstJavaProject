@@ -115,7 +115,6 @@ class GUIPrice extends JFrame{
                     String name = selected.substring(8);
                     try {
                         List<String> stock_data = stock.show_stock_rate(code);
-                        List<String> stock_info = stock.show_stock_info(code);
                         stock_name.setText(name);
                         String gap = stock_data.get(1);
                         if (Integer.parseInt(stock_data.get(1).replace(",", ""))>0){
@@ -148,16 +147,16 @@ class GUIPrice extends JFrame{
                             stock_gap.setText(gap);
                             stock_gap_rate.setText(stock_data.get(2));
                         }
-                        past.setText("전일    "+stock_info.get(0));
-                        c_prise.setText("시가    "+stock_info.get(1));
-                        high.setText("고가    "+stock_info.get(2));
-                        low.setText("저가    "+stock_info.get(3));
-                        trade.setText("거래량    "+stock_info.get(4));
-                        payment.setText("대금    "+stock_info.get(5));
-                        stock_val.setText("시총   "+stock_info.get(6));
-                        forigener.setText("외인소진율    "+stock_info.get(7));
-                        high_52.setText("52주 최고    "+stock_info.get(8));
-                        low_52.setText("52주 최저     "+stock_info.get(9));
+                        past.setText("전일    "+stock_data.get(6));
+                        c_prise.setText("시가    "+stock_data.get(8));
+                        high.setText("고가    "+stock_data.get(7));
+                        low.setText("저가    "+stock_data.get(9));
+                        trade.setText("거래량    "+stock_data.get(4));
+                        payment.setText("대금    "+stock_data.get(5));
+                        stock_val.setText("시총   "+stock_data.get(13));
+                        forigener.setText("외인소진율    "+stock_data.get(11));
+                        high_52.setText("52주 최고    "+stock_data.get(14));
+                        low_52.setText("52주 최저     "+stock_data.get(15));
 
                     } catch (IOException e1) {
                         e1.printStackTrace();
@@ -235,12 +234,12 @@ class GUIPrice extends JFrame{
         stock_top.add(now_stock_price);
         stock_etc.add(stock_gap);
         stock_etc.add(stock_gap_rate);
+        stock_more_info.add(trade);
+        stock_more_info.add(payment);
         stock_more_info.add(past);
         stock_more_info.add(c_prise);
         stock_more_info.add(high);
         stock_more_info.add(low);
-        stock_more_info.add(trade);
-        stock_more_info.add(payment);
         stock_more_info.add(stock_val);
         stock_more_info.add(forigener);
         stock_more_info.add(high_52);
