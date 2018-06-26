@@ -384,18 +384,6 @@ class Menu implements ActionListener{
 
 public class Main{
     public static void main(String args[]) {
-        for (int i = 0; i < 10; i++){
-            try {
-                new Parse().show_stock_rate("005930");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
         new GUIMain();
     }
 }
