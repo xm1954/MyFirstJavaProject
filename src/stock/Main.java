@@ -16,6 +16,7 @@ class GUIMain extends JFrame{
     JButton price = new JButton("주가 확인");
     JButton notice = new JButton("주가 알림이 등록");
     JButton info = new JButton("프로그램 정보");
+    Font font = new Font("나눔고딕", Font.BOLD, 14);
     GridLayout grid = new GridLayout(4,1,5,5);
     Menu menu = new Menu();
     GUIMain(){
@@ -30,6 +31,10 @@ class GUIMain extends JFrame{
         price.addActionListener(menu);
         notice.addActionListener(menu);
         info.addActionListener(menu);
+        search.setFont(font);
+        price.setFont(font);
+        notice.setFont(font);
+        info.setFont(font);
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
@@ -42,6 +47,8 @@ class GUISearch extends JFrame{
     JButton add_btn = new JButton("추가");
     JList result = new JList();
     JScrollPane scroll = new JScrollPane(result);
+    Font font = new Font("나눔고딕", Font.PLAIN, 13);
+    Font font2 = new Font("나눔고딕", Font.BOLD, 13);
     GridLayout gl = new GridLayout(1,2,5,5);
     BorderLayout bl = new BorderLayout();
     Stock p = new Parse();
@@ -49,6 +56,9 @@ class GUISearch extends JFrame{
         setTitle("종목 검색 및 추가");
         setSize(400,300);
         setLayout(bl);
+        result.setFont(font);
+        search_btn.setFont(font2);
+        add_btn.setFont(font2);
         top.setLayout(gl);
         top.add(name);
         top.add(search_btn);
@@ -95,10 +105,10 @@ class GUIPrice extends JFrame{
     JLabel forigener = new JLabel();
     JLabel high_52 = new JLabel();
     JLabel low_52 = new JLabel();
-    Font font = new Font("Apple SD 산돌고딕 Neo", Font.PLAIN, 30);
-    Font font2 = new Font("Apple SD 산돌고딕 Neo", Font.PLAIN, 15);
-    Font font3 = new Font("Apple SD 산돌고딕 Neo", Font.PLAIN, 12);
-    Font font4 = new Font("Apple SD 산돌고딕 Neo", Font.PLAIN, 13);
+    Font font = new Font("나눔고딕", Font.PLAIN, 30);
+    Font font2 = new Font("나눔고딕", Font.PLAIN, 15);
+    Font font3 = new Font("나눔고딕", Font.PLAIN, 12);
+    Font font4 = new Font("나눔고딕", Font.PLAIN, 13);
     Stock stock = new Parse();
     GridLayout gl = new GridLayout(1,2,10,0);
     GridLayout gl2 = new GridLayout(3,1,0,0);
@@ -148,9 +158,42 @@ class GUIPrice extends JFrame{
                             stock_gap_rate.setText(stock_data.get(2));
                         }
                         past.setText("전일    "+stock_data.get(6));
-                        c_prise.setText("시가    "+stock_data.get(8));
-                        high.setText("고가    "+stock_data.get(7));
-                        low.setText("저가    "+stock_data.get(9));
+                        if (Integer.parseInt(stock_data.get(8).replace(",", ""))>Integer.parseInt(stock_data.get(6).replace(",", ""))) {
+                            c_prise.setForeground(Color.red);
+                            c_prise.setText("시가    "+stock_data.get(8));
+                        }
+                        else if (Integer.parseInt(stock_data.get(8).replace(",", ""))==Integer.parseInt(stock_data.get(6).replace(",", ""))) {
+                            c_prise.setForeground(Color.GRAY);
+                            c_prise.setText("시가    "+stock_data.get(8));
+                        }
+                        else if (Integer.parseInt(stock_data.get(8).replace(",", ""))<Integer.parseInt(stock_data.get(6).replace(",", ""))) {
+                            c_prise.setForeground(Color.blue);
+                            c_prise.setText("시가    "+stock_data.get(8));
+                        }
+                        if (Integer.parseInt(stock_data.get(7).replace(",", ""))>Integer.parseInt(stock_data.get(6).replace(",", ""))) {
+                            high.setForeground(Color.red);
+                            high.setText("고가    "+stock_data.get(7));
+                        }
+                        else if (Integer.parseInt(stock_data.get(7).replace(",", ""))==Integer.parseInt(stock_data.get(6).replace(",", ""))) {
+                            high.setForeground(Color.GRAY);
+                            high.setText("고가    "+stock_data.get(7));
+                        }
+                        else if (Integer.parseInt(stock_data.get(7).replace(",", ""))<Integer.parseInt(stock_data.get(6).replace(",", ""))) {
+                            high.setForeground(Color.blue);
+                            high.setText("고가    "+stock_data.get(7));
+                        }
+                        if (Integer.parseInt(stock_data.get(9).replace(",", ""))>Integer.parseInt(stock_data.get(6).replace(",", ""))) {
+                            low.setForeground(Color.red);
+                            low.setText("저가    "+stock_data.get(9));
+                        }
+                        else if (Integer.parseInt(stock_data.get(9).replace(",", ""))==Integer.parseInt(stock_data.get(6).replace(",", ""))) {
+                            low.setForeground(Color.GRAY);
+                            low.setText("저가    "+stock_data.get(9));
+                        }
+                        else if (Integer.parseInt(stock_data.get(9).replace(",", ""))<Integer.parseInt(stock_data.get(6).replace(",", ""))) {
+                            low.setForeground(Color.blue);
+                            low.setText("저가    "+stock_data.get(9));
+                        }
                         trade.setText("거래량    "+stock_data.get(4));
                         payment.setText("대금    "+stock_data.get(5));
                         stock_val.setText("시총   "+stock_data.get(13));
@@ -198,6 +241,7 @@ class GUIPrice extends JFrame{
         forigener.setFont(font4);
         high_52.setFont(font4);
         low_52.setFont(font4);
+        stock_list.setFont(font4);
         now_stock_price.setVerticalAlignment(SwingConstants.TOP);
         now_stock_price.setHorizontalAlignment(SwingConstants.CENTER);
         stock_name.setVerticalAlignment(SwingConstants.CENTER);
@@ -265,8 +309,10 @@ class GUINotice extends JFrame{
     JLabel stock_market = new JLabel();
     JSlider set_price = new JSlider();
     JButton notice_set = new JButton("알림 설정");
-    Font font = new Font("Apple SD 산돌고딕 Neo", Font.PLAIN, 30);
-    Font font2 = new Font("Apple SD 산돌고딕 Neo", Font.PLAIN, 12);
+    Font font = new Font("나눔고딕", Font.PLAIN, 30);
+    Font font2 = new Font("나눔고딕", Font.PLAIN, 12);
+    Font font3 = new Font("나눔고딕", Font.PLAIN, 13);
+    Font font4 = new Font("나눔고딕", Font.BOLD, 13);
     GridLayout gl = new GridLayout(3,1);
     GridLayout gl2 = new GridLayout(3,1);
     BorderLayout bl = new BorderLayout();
@@ -295,7 +341,7 @@ class GUINotice extends JFrame{
     };
     GUINotice(){
         setTitle("주가 알림이 등록");
-        setSize(400,300);
+        setSize(450,300);
         setLayout(bl);
         Ui.setLayout(gl);
         stock_info.setLayout(gl2);
@@ -303,6 +349,8 @@ class GUINotice extends JFrame{
         stock_name.setFont(font);
         stock_price.setFont(font);
         stock_market.setFont(font2);
+        stock_list.setFont(font3);
+        notice_set.setFont(font4);
         stock_price.setVerticalAlignment(SwingConstants.TOP);
         stock_price.setHorizontalAlignment(SwingConstants.CENTER);
         stock_name.setVerticalAlignment(SwingConstants.CENTER);
@@ -326,8 +374,9 @@ class GUINotice extends JFrame{
 class GUIInfo extends JFrame{
     JLabel p_name = new JLabel();
     JLabel content = new JLabel();
-    Font font = new Font("Apple SD 산돌고딕 Neo", Font.PLAIN, 30);
-    Font font2 = new Font("Apple SD 산돌고딕 Neo", Font.PLAIN, 12);
+    Font font = new Font("나눔고딕", Font.PLAIN, 30);
+    Font font2 = new Font("나눔고딕", Font.PLAIN, 12);
+    Font font3 = new Font("나눔고딕", Font.BOLD, 13);
     JButton go_git = new JButton("개발자 Github 가기");
     Menu menu = new Menu();
     BorderLayout bl = new BorderLayout();
@@ -335,13 +384,14 @@ class GUIInfo extends JFrame{
         setLayout(bl);
         setSize(300,300);
         p_name.setFont(font);
-        p_name.setText("증권 시세 알림이");
+        p_name.setText("<html><br>증권 시세 알림이</html>");
         p_name.setVerticalAlignment(SwingConstants.CENTER);
         p_name.setHorizontalAlignment(SwingConstants.CENTER);
         content.setFont(font2);
-        content.setText("<html>제작자 : 20221 정민우<br>버전 : V1.0<br>빌드 일자 : 2018.06.23</html>");
+        content.setText("<html>제작자 : 20221 정민우<br>버전 : V1.0<br>빌드 일자 : 2018.06.28</html>");
         content.setVerticalAlignment(SwingConstants.CENTER);
         content.setHorizontalAlignment(SwingConstants.CENTER);
+        go_git.setFont(font3);
         add(go_git, "South");
         add(content,"Center");
         add(p_name, "North");
@@ -354,7 +404,6 @@ class GUIInfo extends JFrame{
 
 class Menu implements ActionListener{
     public void actionPerformed(ActionEvent e){
-        Stock p = new Parse();
         JButton btn = (JButton)e.getSource();
         switch (btn.getText()) {
             case "종목 검색 및 추가":
