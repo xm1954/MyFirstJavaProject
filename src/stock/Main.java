@@ -51,7 +51,7 @@ class GUISearch extends JFrame{
     Font font2 = new Font("나눔고딕", Font.BOLD, 13);
     GridLayout gl = new GridLayout(1,2,5,5);
     BorderLayout bl = new BorderLayout();
-    Stock p = new Parse();
+    stock.Stock p = new stock.Parse();
     GUISearch(){
         setTitle("종목 검색 및 추가");
         setSize(400,300);
@@ -74,8 +74,8 @@ class GUISearch extends JFrame{
         });
         add_btn.addActionListener(e -> {
             String selected = (String) result.getSelectedValue();
-            if (!Stock.added_stock.contains(selected))
-                Stock.added_stock.add(selected);
+            if (!p.added_stock.contains(selected))
+                p.added_stock.add(selected);
             System.out.println(selected);
         });
         setVisible(true);
@@ -160,7 +160,7 @@ class GUIPrice extends JFrame{
                         past.setText("전일    "+stock_data.get(6));
                         if (Integer.parseInt(stock_data.get(8).replace(",", ""))>Integer.parseInt(stock_data.get(6).replace(",", ""))) {
                             c_prise.setForeground(Color.red);
-                            c_prise.setText("시가    "+stock_data.get(8));
+                            c_prise.setText("시가    "+stock_data.get(8).replace("+", ""));
                         }
                         else if (Integer.parseInt(stock_data.get(8).replace(",", ""))==Integer.parseInt(stock_data.get(6).replace(",", ""))) {
                             c_prise.setForeground(Color.GRAY);
@@ -168,11 +168,11 @@ class GUIPrice extends JFrame{
                         }
                         else if (Integer.parseInt(stock_data.get(8).replace(",", ""))<Integer.parseInt(stock_data.get(6).replace(",", ""))) {
                             c_prise.setForeground(Color.blue);
-                            c_prise.setText("시가    "+stock_data.get(8));
+                            c_prise.setText("시가    "+stock_data.get(8).replace("-", ""));
                         }
                         if (Integer.parseInt(stock_data.get(7).replace(",", ""))>Integer.parseInt(stock_data.get(6).replace(",", ""))) {
                             high.setForeground(Color.red);
-                            high.setText("고가    "+stock_data.get(7));
+                            high.setText("고가    "+stock_data.get(7).replace("+", ""));
                         }
                         else if (Integer.parseInt(stock_data.get(7).replace(",", ""))==Integer.parseInt(stock_data.get(6).replace(",", ""))) {
                             high.setForeground(Color.GRAY);
@@ -180,11 +180,11 @@ class GUIPrice extends JFrame{
                         }
                         else if (Integer.parseInt(stock_data.get(7).replace(",", ""))<Integer.parseInt(stock_data.get(6).replace(",", ""))) {
                             high.setForeground(Color.blue);
-                            high.setText("고가    "+stock_data.get(7));
+                            high.setText("고가    "+stock_data.get(7).replace("-", ""));
                         }
                         if (Integer.parseInt(stock_data.get(9).replace(",", ""))>Integer.parseInt(stock_data.get(6).replace(",", ""))) {
                             low.setForeground(Color.red);
-                            low.setText("저가    "+stock_data.get(9));
+                            low.setText("저가    "+stock_data.get(9).replace("+", ""));
                         }
                         else if (Integer.parseInt(stock_data.get(9).replace(",", ""))==Integer.parseInt(stock_data.get(6).replace(",", ""))) {
                             low.setForeground(Color.GRAY);
@@ -192,7 +192,7 @@ class GUIPrice extends JFrame{
                         }
                         else if (Integer.parseInt(stock_data.get(9).replace(",", ""))<Integer.parseInt(stock_data.get(6).replace(",", ""))) {
                             low.setForeground(Color.blue);
-                            low.setText("저가    "+stock_data.get(9));
+                            low.setText("저가    "+stock_data.get(9).replace("-", ""));
                         }
                         trade.setText("거래량    "+stock_data.get(4));
                         payment.setText("대금    "+stock_data.get(5));
@@ -317,26 +317,31 @@ class GUINotice extends JFrame{
     GridLayout gl2 = new GridLayout(3,1);
     BorderLayout bl = new BorderLayout();
     Stock stock = new Parse();
-    ListSelectionListener set_notice = new ListSelectionListener() {
-        @Override
-        public void valueChanged(ListSelectionEvent e) {
-            String selected = (String) stock_list.getSelectedValue();
-            String code = selected.substring(0,6);
-            String name = selected.substring(8);
-            try {
-                List<String> stock_rate = stock.show_stock_rate(code);
-                stock_price.setText(stock_rate.get(0));
-                stock_name.setText(name);
-                if (stock_rate.get(3).equals("코스피")){
-                    stock_market.setText("KOSPI");
-                }
-                else if (stock_rate.get(3).equals("코스닥")){
-                    stock_market.setText("KOSDAQ");
-                }
-
-            } catch (IOException e1) {
-                e1.printStackTrace();
+    ListSelectionListener set_notice = e -> {
+        String selected = (String) stock_list.getSelectedValue();
+        String code = selected.substring(0,6);
+        String name = selected.substring(8);
+        try {
+            List<String> stock_rate = stock.show_stock_rate(code);
+            stock_price.setText(stock_rate.get(0));
+            stock_name.setText(name);
+            if (stock_rate.get(3).equals("코스피")){
+                stock_market.setText("KOSPI");
             }
+            else if (stock_rate.get(3).equals("코스닥")){
+                stock_market.setText("KOSDAQ");
+            }
+            set_price.setMaximum(Integer.parseInt(stock_rate.get(10).replace(",", "")));
+            set_price.setMinimum(Integer.parseInt(stock_rate.get(12).replace(",", "")));
+            set_price.setValue(Integer.parseInt(stock_rate.get(0).replace(",", "")));
+            set_price.setLabelTable(set_price.createStandardLabels(1000));
+            set_price.setMinorTickSpacing(50);
+            set_price.setPaintLabels(true);
+            set_price.setPaintTicks(true);
+            set_price.setPaintTrack(true);
+
+        } catch (IOException e1) {
+            e1.printStackTrace();
         }
     };
     GUINotice(){
@@ -351,7 +356,7 @@ class GUINotice extends JFrame{
         stock_market.setFont(font2);
         stock_list.setFont(font3);
         notice_set.setFont(font4);
-        stock_price.setVerticalAlignment(SwingConstants.TOP);
+        stock_price.setVerticalAlignment(SwingConstants.CENTER);
         stock_price.setHorizontalAlignment(SwingConstants.CENTER);
         stock_name.setVerticalAlignment(SwingConstants.CENTER);
         stock_name.setHorizontalAlignment(SwingConstants.CENTER);
