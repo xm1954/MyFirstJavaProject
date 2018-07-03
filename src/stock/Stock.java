@@ -24,7 +24,7 @@ class Parse extends Stock{
     public Object[] search_stocks(String search) throws IOException{
         List<String> stock = new ArrayList<>();
         String search_encode = URLEncoder.encode(search, "cp949");
-        Connection.Response response = Jsoup.connect("http://finance.naver.com/search/searchList.nhn?query="+search_encode)
+        Connection.Response response = Jsoup.connect("https://finance.naver.com/search/searchList.nhn?query="+search_encode)
                 .method(Connection.Method.GET)
                 .execute();
         Document document = response.parse();
